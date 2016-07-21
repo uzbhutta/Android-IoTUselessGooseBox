@@ -7,6 +7,8 @@ import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +43,19 @@ public class CustomFragment extends Fragment {
 
         mFabSize = getResources().getDimensionPixelSize(R.dimen.fab_size);
         bindViews(view);
+
+        //setup recycler view
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+
+        //setup adapter
+        CustomListAdapter customListAdapter = new CustomListAdapter();
+        //attach adapter to recycler view
+        recyclerView.setAdapter(customListAdapter);
+
+        //set LayoutManager for recyclerView. Use vertical list
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        //attach layout manager to recyclerView
+        recyclerView.setLayoutManager(layoutManager);
 
         return view;
     }

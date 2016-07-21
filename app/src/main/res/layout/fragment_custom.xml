@@ -63,7 +63,7 @@
     <FrameLayout
         android:id="@+id/fab_container"
         android:layout_width="match_parent"
-        android:layout_height="470dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="-18dp"
         android:elevation="5dp"
         android:layout_below="@+id/instructionsLinearLayout"

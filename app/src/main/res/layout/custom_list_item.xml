@@ -8,14 +8,14 @@
         android:layout_height="wrap_content"
         android:text="1"
         android:textStyle="bold"
-        android:id="@+id/presetIndex"
+        android:id="@+id/customIndex"
         android:textColor="@color/brand_primary"
         android:layout_marginTop="18dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="12dp">
@@ -27,17 +27,27 @@
             android:text="Watchin' You"
             android:fontFamily="sans-serif-light"
             android:textColor="@color/brand_grey"
-            android:id="@+id/presetTitle" />
+            android:id="@+id/customTitle" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Only sound, slow open, and fast finish"
             android:layout_marginTop="1dp"
-            android:id="@+id/presetDescription" />
+            android:id="@+id/customDescription" />
 
 
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/customDelete"
+        android:src="@android:drawable/ic_menu_delete"
+
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="5dp" />
 
 
 </LinearLayout>

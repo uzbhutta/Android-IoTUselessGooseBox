@@ -26,7 +26,7 @@ public class PresetFragment extends Fragment {
         //attach adapter to recycler view
         recyclerView.setAdapter(presetListAdapter);
 
-        //set LayoutManager for recyclerView. Use veritcal list
+        //set LayoutManager for recyclerView. Use vertical list
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         //attach layout manager to recyclerView
         recyclerView.setLayoutManager(layoutManager);

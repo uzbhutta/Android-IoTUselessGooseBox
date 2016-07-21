@@ -36,7 +36,7 @@ public class PresetListAdapter extends RecyclerView.Adapter {
         public PresetListViewHolder(View itemView) {
             super(itemView);
             presetIndex = (TextView) itemView.findViewById(R.id.presetIndex);
-            presetTitle = (TextView) itemView.findViewById(R.id.preserTitle);
+            presetTitle = (TextView) itemView.findViewById(R.id.presetTitle);
             presetDescription = (TextView) itemView.findViewById(R.id.presetDescription);
 
             itemView.setOnClickListener(this);
@@ -47,7 +47,6 @@ public class PresetListAdapter extends RecyclerView.Adapter {
             presetIndex.setText(displayNum + "");
             presetTitle.setText(Common.presetTitles[pos]);
             presetDescription.setText(Common.presetDescriptions[pos]);
-
         }
 
         @Override
