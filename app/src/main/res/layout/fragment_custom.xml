@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/instructionsLinearLayout"
+        android:background="@color/brand_primary"
+        android:elevation="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="horizontal"/>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_height="30dp"
+        android:layout_width="match_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_below="@+id/instructionsLinearLayout"
+        android:paddingLeft="20dp"
+        android:elevation="0dp"
+        android:background="@color/brand_grey"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="USER ACTIONS"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center_vertical"
+                android:textColor="@color/blue_white_text"
+                />
+
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <FrameLayout
+        android:id="@+id/fab_container"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_marginTop="-15dp"
+        android:elevation="10dp"
+        android:layout_below="@+id/instructionsLinearLayout"
+        >
+
+        <LinearLayout
+            android:id="@+id/media_controls_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:scaleX="0"
+                android:scaleY="0"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_rewind_white_24dp"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:scaleX="0"
+                android:scaleY="0"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="72dp"
+                android:layout_marginRight="72dp"
+                android:src="@drawable/ic_play_white_24dp"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:scaleX="0"
+                android:scaleY="0"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_fast_forward_white_24dp"
+                />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/fab"
+            android:transitionName="button_fab"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_gravity="top|right"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:background="@drawable/ripple"
+            android:elevation="10dp"
+            android:onClick="onFabPressed"
+            />
+
+    </FrameLayout>
+</RelativeLayout>
