@@ -24,7 +24,7 @@ public class CustomListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return Common.presetTitles.length;
+        return CustomFragment.name.size();
     }
 
     private class CustomListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -46,8 +46,8 @@ public class CustomListAdapter extends RecyclerView.Adapter {
         public void bindView(int pos) {
             int displayNum = pos + 1;
             customIndex.setText(displayNum + "");
-            customTitle.setText(Common.presetTitles[pos]);
-            customDescription.setText(Common.presetDescriptions[pos]);
+            customTitle.setText(CustomFragment.name.get(pos));
+            customDescription.setText(CustomFragment.info.get(pos));
         }
 
         @Override

@@ -4,11 +4,20 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.AutoTransition;
+import android.transition.ChangeBounds;
+import android.transition.ChangeTransform;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Scene;
+import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,19 +28,50 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 import ca.m3dia.iotuselessgoosebox.lib.AnimatorPath;
 import ca.m3dia.iotuselessgoosebox.lib.PathEvaluator;
 import ca.m3dia.iotuselessgoosebox.lib.PathPoint;
+import ca.m3dia.iotuselessgoosebox.lib.ReverseInterpolator;
+import io.particle.android.sdk.cloud.ParticleCloudException;
+import io.particle.android.sdk.cloud.ParticleCloudSDK;
+import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 
 /**
  * Created by umarb_000 on 2016-07-20.
  */
 public class CustomFragment extends Fragment {
+    private static final String TAG = CustomFragment.class.getSimpleName();
+    public static String CUSTOM_NAME = "CUSTOM_NAME";
+    public static String CUSTOM_INFO = "CUSTOM_INFO";
+    public static String CUSTOM_LETTERS = "CUSTOM_LETTERS";
+
+    public static ArrayList<String> name = new ArrayList<>();
+    public static ArrayList<String> info = new ArrayList<>();
+    public static ArrayList<String> letters = new ArrayList<>();
+    String json = "";
+
     private View mFab;
     private FrameLayout mFabContainer;
     private LinearLayout mControlsContainer;
+    private RelativeLayout mRelativeLayout;
+
+    private EditText nameEditText;
+    Button addButton, cancelButton;
+    private Spinner lidSpinner;
+    private Spinner lidLedSpinner;
+    private Spinner redLedSpinner;
+    private Spinner armSpinner;
+    private Spinner soundSpinner;
+
+    ParticleDevice currDevice;
 
     public final static float SCALE_FACTOR      = 13f;
     public final static int ANIMATION_DURATION  = 300;
@@ -40,22 +80,32 @@ public class CustomFragment extends Fragment {
     private boolean mRevealFlag;
     private float mFabSize;
 
-    private EditText nameEditText;
-    private Spinner lidSpinner;
-    private Spinner lidLedSpinner;
-    private Spinner redLedSpinner;
-    private Spinner armSpinner;
-    private Spinner soundSpinner;
-    Button addButton, cancelButton;
+    private String lidAction;
+    private String lidLedAction;
+    private String redLedAction;
+    private String armAction;
+    private String soundAction;
+
+    private String customName;
+    private String customInfo;
+    private String customLetters;
+
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_custom, container, false);
 
         mFabSize = getResources().getDimensionPixelSize(R.dimen.fab_size);
         bindViews(view);
+        setupList(view);
 
+        ParticleDeviceSetupLibrary.init(getContext().getApplicationContext(), MainActivity.class);
+
+        return view;
+    }
+
+    private void setupList(View view) {
         //setup recycler view
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
 
@@ -68,18 +118,9 @@ public class CustomFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         //attach layout manager to recyclerView
         recyclerView.setLayoutManager(layoutManager);
-
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reverseFabAnimation();
-            }
-        });
-
-        return view;
     }
 
-    private void bindViews(View view) {
+    private void bindViews(final View view) {
         mFab = view.findViewById(R.id.fab);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -87,6 +128,7 @@ public class CustomFragment extends Fragment {
             }
         });
 
+        mRelativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayout);
         mFabContainer = (FrameLayout) view.findViewById(R.id.fab_container);
         mControlsContainer = (LinearLayout) view.findViewById(R.id.add_custom_container);
         mFabContainer.bringToFront();
@@ -127,61 +169,187 @@ public class CustomFragment extends Fragment {
                 R.array.sound_spinner, android.R.layout.simple_spinner_item);
         soundAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         soundSpinner.setAdapter(soundAdapter);
-    }
 
-    private void reverseFabAnimation() {
-        final float startX = mFab.getX();
-
-        AnimatorPath path = new AnimatorPath();
-        path.moveTo(0, 0);
-        path.curveTo(-200, 200, -400, 100, -600, 50);
-
-        final ObjectAnimator anim = ObjectAnimator.ofObject(this, "fabLoc",
-                new PathEvaluator(), path.getPoints().toArray());
-
-        anim.setInterpolator(new AccelerateInterpolator());
-        anim.setDuration(ANIMATION_DURATION);
-        anim.start();
-
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                if (Math.abs(startX - mFab.getX()) > MINIMUN_X_DISTANCE) {
-                    if (!mRevealFlag) {
-                        mFabContainer.setY(mFabContainer.getY() + mFabSize - 17);
+            public void onClick(View v) {
+                lidAction = lidSpinner.getSelectedItem().toString();
+                lidLedAction = lidLedSpinner.getSelectedItem().toString();
+                redLedAction = redLedSpinner.getSelectedItem().toString();
+                armAction = armSpinner.getSelectedItem().toString();
+                soundAction = soundSpinner.getSelectedItem().toString();
 
+                customName = nameEditText.getText().toString();
+                customInfo = lidAction + ", " + lidLedAction + ", " + redLedAction + ", " +
+                        armAction + ", " + soundAction;
 
-                        mFab.animate()
-                                .scaleXBy(0)
-                                .scaleYBy(0)
-                                .setListener(mEndRevealListener)
-                                .setDuration(ANIMATION_DURATION);
+                name.add(customName);
+                info.add(customInfo);
 
+                switch(lidAction) {
+                    case "Normal":
+                        customLetters = "A";
+                        break;
+                    case "Fast":
+                        customLetters = "B";
+                        break;
+                    case "Slow":
+                        customLetters = "C";
+                        break;
+                    case "Shake":
+                        customLetters = "D";
+                        break;
+                    default:
+                        customLetters = "A";
+                        break;
+                }
 
-                        mFab.setVisibility(View.VISIBLE);
+                switch(lidLedAction) {
+                    case "On":
+                        customLetters += "A";
+                        break;
+                    case "Delayed On":
+                        customLetters += "B";
+                        break;
+                    case "Off":
+                        customLetters += "C";
+                        break;
+                    case "Flicker":
+                        customLetters += "D";
+                        break;
+                    default:
+                        customLetters += "C";
+                        break;
+                }
 
-                        mFabContainer.setBackgroundColor(getResources()
-                                .getColor(R.color.blue_white_text));
+                switch(redLedAction) {
+                    case "On":
+                        customLetters += "A";
+                        break;
+                    case "Delayed On":
+                        customLetters += "B";
+                        break;
+                    case "Off":
+                        customLetters += "C";
+                        break;
+                    case "Flicker":
+                        customLetters += "D";
+                        break;
+                    default:
+                        customLetters += "C";
+                        break;
+                }
 
+                switch(armAction) {
+                    case "Normal":
+                        customLetters += "A";
+                        break;
+                    case "Fast":
+                        customLetters += "B";
+                        break;
+                    case "Slow":
+                        customLetters += "C";
+                        break;
+                    case "Shake":
+                        customLetters += "D";
+                        break;
+                    default:
+                        customLetters += "A";
+                        break;
+                }
 
-                        mControlsContainer.setPadding(0, -400, 0, 0);
+                switch(soundAction) {
+                    case "On":
+                        customLetters += "A";
+                        break;
+                    case "Off":
+                        customLetters += "B";
+                        break;
+                    default:
+                        customLetters += "B";
+                        break;
+                }
 
-                        for (int i = 0; i < mControlsContainer.getChildCount(); i++) {
-                            View v = mControlsContainer.getChildAt(i);
-                            ViewPropertyAnimator animator = v.animate()
-                                    .scaleX(0).scaleY(0)
-                                    .setDuration(ANIMATION_DURATION);
+                ViewGroup transitionRoot = mRelativeLayout;
 
-                            animator.setStartDelay(i * 50);
-                            animator.start();
+                Scene originalScene = Scene.getSceneForLayout(transitionRoot, R.layout.fragment_custom, view.getContext());
+
+                originalScene.setEnterAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < name.size(); i++) {
+                            Log.d(TAG, i + ". " + name.get(i));
                         }
 
+                        for (int i = 0; i < info.size(); i++) {
+                            Log.d(TAG, i + ". " + info.get(i));
+                        }
+
+                        //Create json from letters ArrayList
+                        json = "{\"type\":1, \"data\":[";
+
+                        for(String member : letters) {
+                            json += "\"" + member + "\",";
+                        }
+
+                        json = json.substring(0, json.length() - 1);
+                        json += "]}";
+
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                // Make the Particle call here
+
+                                ArrayList<String> jsonList = new ArrayList<>();
+                                jsonList.add(json);
+
+                                try {
+                                    ParticleCloudSDK.getCloud().logIn("umar.bhutta@hotmail.com", "560588123rocks");
+                                    currDevice = ParticleCloudSDK.getCloud().getDevice("31001c000e47343432313031");
+
+                                    int resultCode = currDevice.callFunction("jsonParser", jsonList);
+
+                                    //capture resultCode from particle function to toast to user
+                                    if (resultCode == 1) {
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                Toast.makeText(getActivity(), "Successfully added action to the list.", Toast.LENGTH_LONG).show();
+                                                Log.d(TAG, "Successfully added action to the list.");
+                                            }
+                                        });
+                                    } else {
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                Toast.makeText(getActivity(), "No new actions were added to the list.", Toast.LENGTH_LONG).show();
+                                                Log.d(TAG, "No new actions were added to the list.");
+                                            }
+                                        });
+                                    }
+
+                                } catch (ParticleCloudException e) {
+                                    e.printStackTrace();
+                                } catch (ParticleDevice.FunctionDoesNotExistException e) {
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                jsonList.clear();
+                            }
+                        }.start();
+
+
+                        bindViews(view);
+                        setupList(view);
+
+                        mRevealFlag = false;
                     }
-                }
+                });
+
+                TransitionManager.go(originalScene, new ChangeTransform());
             }
         });
     }
+
 
     public void onFabPressed(View view) {
         final float startX = mFab.getX();
