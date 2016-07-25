@@ -1,3 +1,37 @@
 <resources>
     <string name="app_name">IoT Useless Goose Box</string>
+    <string name="name">Name</string>
+
+    <string-array name="lid_spinner">
+        <item>Normal</item>
+        <item>Fast</item>
+        <item>Slow</item>
+        <item>Shake</item>
+    </string-array>
+
+    <string-array name="lid_led_spinner">
+        <item>On</item>
+        <item>Delayed On</item>
+        <item>Off</item>
+        <item>Flicker</item>
+    </string-array>
+
+    <string-array name="red_led_spinner">
+        <item>On</item>
+        <item>Delayed On</item>
+        <item>Off</item>
+        <item>Flicker</item>
+    </string-array>
+
+    <string-array name="arm_spinner">
+        <item>Normal</item>
+        <item>Fast</item>
+        <item>Slow</item>
+        <item>Shake</item>
+    </string-array>
+
+    <string-array name="sound_spinner">
+        <item>On</item>
+        <item>Off</item>
+    </string-array>
 </resources>

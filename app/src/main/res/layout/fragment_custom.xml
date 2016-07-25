@@ -1,43 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/instructionsLinearLayout"
-        android:background="@color/brand_primary"
-        android:elevation="3dp"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:orientation="horizontal"/>
+        android:background="@color/brand_primary"
+        android:elevation="3dp"
+        android:orientation="horizontal" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_height="33dp"
         android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
+        android:layout_height="33dp"
         android:layout_below="@+id/instructionsLinearLayout"
-        android:paddingLeft="20dp"
-        android:elevation="0dp"
         android:background="@color/brand_grey"
-        >
+        android:elevation="0dp"
+        android:minHeight="?attr/actionBarSize"
+        android:paddingLeft="20dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_gravity="center_vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="USER-DEFINED ACTIONS"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center_vertical"
-                android:textColor="@color/blue_white_text"
-                />
+                android:text="USER-DEFINED ACTIONS"
+                android:textColor="@android:color/white" />
 
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
@@ -45,17 +42,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_below="@id/toolbar"    >
+        android:layout_below="@id/toolbar"
+        android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/recyclerView"
-            android:paddingTop="12dp"
             android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin">
-        </android.support.v7.widget.RecyclerView>
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="12dp"></android.support.v7.widget.RecyclerView>
 
     </LinearLayout>
 
@@ -64,49 +60,162 @@
         android:id="@+id/fab_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="-18dp"
-        android:elevation="5dp"
         android:layout_below="@+id/instructionsLinearLayout"
-        >
+        android:layout_marginTop="-18dp"
+        android:clipChildren="false"
+        android:elevation="5dp">
 
         <LinearLayout
-            android:id="@+id/media_controls_container"
+            android:id="@+id/add_custom_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_gravity="center"
-            >
+            android:paddingTop="-40dp"
+            android:clipChildren="false"
+            android:orientation="vertical">
 
-            <ImageView
+            <LinearLayout
+                android:id="@+id/add_custom__items"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:scaleX="0"
                 android:scaleY="0"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_rewind_white_24dp"
-                />
+                android:paddingBottom="20dp"
+                android:clipChildren="false"
+                android:orientation="horizontal">
 
-            <ImageView
+                <LinearLayout
+                    android:id="@+id/add_custom_titles"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingRight="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="Name" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="Lid Movement" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="Lid Light" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="Goose Light" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="Arm Movement" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="Goose Sound" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/add_custom_fields"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="20dp"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/nameEditText"
+                        android:text=""
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content" />
+
+                    <Spinner
+                        android:id="@+id/lidSpinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="12dp" />
+
+                    <Spinner
+                        android:id="@+id/lidLedSpinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="12dp" />
+
+                    <Spinner
+                        android:id="@+id/redLedSpinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="12dp" />
+
+                    <Spinner
+                        android:id="@+id/armSpinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="12dp" />
+
+                    <Spinner
+                        android:id="@+id/soundSpinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="12dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/buttons_container"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:scaleX="0"
                 android:scaleY="0"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="72dp"
-                android:layout_marginRight="72dp"
-                android:src="@drawable/ic_play_white_24dp"
-                />
+                android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:scaleX="0"
-                android:scaleY="0"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_fast_forward_white_24dp"
-                />
+                <Button
+                    android:id="@+id/addButton"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:text="Add"
+                    android:layout_marginRight="20dp"/>
+
+                <Button
+                    android:id="@+id/cancelButton"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:background="#FF5151"
+                    android:textColor="@android:color/white"
+                    android:layout_marginLeft="20dp"
+                    android:text="Cancel" />
+            </LinearLayout>
+
+
         </LinearLayout>
 
         <ImageButton
             android:id="@+id/fab"
-            android:transitionName="button_fab"
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:layout_gravity="top|right"
@@ -114,7 +223,7 @@
             android:background="@drawable/ripple"
             android:elevation="10dp"
             android:onClick="onFabPressed"
-            />
+            android:transitionName="button_fab" />
 
     </FrameLayout>
 </RelativeLayout>

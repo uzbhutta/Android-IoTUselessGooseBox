@@ -14,8 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import ca.m3dia.iotuselessgoosebox.lib.AnimatorPath;
 import ca.m3dia.iotuselessgoosebox.lib.PathEvaluator;
@@ -35,6 +39,14 @@ public class CustomFragment extends Fragment {
 
     private boolean mRevealFlag;
     private float mFabSize;
+
+    private EditText nameEditText;
+    private Spinner lidSpinner;
+    private Spinner lidLedSpinner;
+    private Spinner redLedSpinner;
+    private Spinner armSpinner;
+    private Spinner soundSpinner;
+    Button addButton, cancelButton;
 
     @Nullable
     @Override
@@ -57,6 +69,13 @@ public class CustomFragment extends Fragment {
         //attach layout manager to recyclerView
         recyclerView.setLayoutManager(layoutManager);
 
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reverseFabAnimation();
+            }
+        });
+
         return view;
     }
 
@@ -69,7 +88,99 @@ public class CustomFragment extends Fragment {
         });
 
         mFabContainer = (FrameLayout) view.findViewById(R.id.fab_container);
-        mControlsContainer = (LinearLayout) view.findViewById(R.id.media_controls_container);
+        mControlsContainer = (LinearLayout) view.findViewById(R.id.add_custom_container);
+        mFabContainer.bringToFront();
+
+        nameEditText = (EditText) view.findViewById(R.id.nameEditText);
+        addButton = (Button) view.findViewById(R.id.addButton);
+        cancelButton = (Button) view.findViewById(R.id.cancelButton);
+
+        lidSpinner = (Spinner) view.findViewById(R.id.lidSpinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> lidAdapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.lid_spinner, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        lidAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the lidAdapter to the spinner
+        lidSpinner.setAdapter(lidAdapter);
+
+        lidLedSpinner = (Spinner) view.findViewById(R.id.lidLedSpinner);
+        ArrayAdapter<CharSequence> lidLedAdapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.lid_led_spinner, android.R.layout.simple_spinner_item);
+        lidLedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        lidLedSpinner.setAdapter(lidLedAdapter);
+
+        redLedSpinner = (Spinner) view.findViewById(R.id.redLedSpinner);
+        ArrayAdapter<CharSequence> redLedAdapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.red_led_spinner, android.R.layout.simple_spinner_item);
+        redLedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        redLedSpinner.setAdapter(redLedAdapter);
+
+        armSpinner = (Spinner) view.findViewById(R.id.armSpinner);
+        ArrayAdapter<CharSequence> armAdapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.arm_spinner, android.R.layout.simple_spinner_item);
+        armAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        armSpinner.setAdapter(armAdapter);
+
+        soundSpinner = (Spinner) view.findViewById(R.id.soundSpinner);
+        ArrayAdapter<CharSequence> soundAdapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.sound_spinner, android.R.layout.simple_spinner_item);
+        soundAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        soundSpinner.setAdapter(soundAdapter);
+    }
+
+    private void reverseFabAnimation() {
+        final float startX = mFab.getX();
+
+        AnimatorPath path = new AnimatorPath();
+        path.moveTo(0, 0);
+        path.curveTo(-200, 200, -400, 100, -600, 50);
+
+        final ObjectAnimator anim = ObjectAnimator.ofObject(this, "fabLoc",
+                new PathEvaluator(), path.getPoints().toArray());
+
+        anim.setInterpolator(new AccelerateInterpolator());
+        anim.setDuration(ANIMATION_DURATION);
+        anim.start();
+
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                if (Math.abs(startX - mFab.getX()) > MINIMUN_X_DISTANCE) {
+                    if (!mRevealFlag) {
+                        mFabContainer.setY(mFabContainer.getY() + mFabSize - 17);
+
+
+                        mFab.animate()
+                                .scaleXBy(0)
+                                .scaleYBy(0)
+                                .setListener(mEndRevealListener)
+                                .setDuration(ANIMATION_DURATION);
+
+
+                        mFab.setVisibility(View.VISIBLE);
+
+                        mFabContainer.setBackgroundColor(getResources()
+                                .getColor(R.color.blue_white_text));
+
+
+                        mControlsContainer.setPadding(0, -400, 0, 0);
+
+                        for (int i = 0; i < mControlsContainer.getChildCount(); i++) {
+                            View v = mControlsContainer.getChildAt(i);
+                            ViewPropertyAnimator animator = v.animate()
+                                    .scaleX(0).scaleY(0)
+                                    .setDuration(ANIMATION_DURATION);
+
+                            animator.setStartDelay(i * 50);
+                            animator.start();
+                        }
+
+                    }
+                }
+            }
+        });
     }
 
     public void onFabPressed(View view) {
@@ -92,13 +203,16 @@ public class CustomFragment extends Fragment {
             public void onAnimationUpdate(ValueAnimator animation) {
                 if (Math.abs(startX - mFab.getX()) > MINIMUN_X_DISTANCE) {
                     if (!mRevealFlag) {
-                        mFabContainer.setY(mFabContainer.getY() + mFabSize / 2);
+                        mFabContainer.setY(mFabContainer.getY() + mFabSize - 17);
+
 
                         mFab.animate()
                                 .scaleXBy(SCALE_FACTOR)
                                 .scaleYBy(SCALE_FACTOR)
                                 .setListener(mEndRevealListener)
                                 .setDuration(ANIMATION_DURATION);
+
+
 
                         mRevealFlag = true;
                     }
@@ -112,10 +226,13 @@ public class CustomFragment extends Fragment {
         @Override
         public void onAnimationEnd(Animator animation) {
             super.onAnimationEnd(animation);
-
             mFab.setVisibility(View.INVISIBLE);
+
             mFabContainer.setBackgroundColor(getResources()
                     .getColor(R.color.brand_accent));
+
+
+            mControlsContainer.setPadding(0, -400, 0, 0);
 
             for (int i = 0; i < mControlsContainer.getChildCount(); i++) {
                 View v = mControlsContainer.getChildAt(i);
