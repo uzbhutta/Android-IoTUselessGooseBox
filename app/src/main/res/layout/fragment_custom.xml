@@ -19,9 +19,9 @@
             android:id="@+id/toggleCustomTextView"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:paddingTop="10dp"
+            android:paddingTop="15dp"
             android:maxLines="10"
-            android:text="Define up to 5 actions. Tap here to set the box to Custom Mode. Toggling the switch will execute one of the actions. \n\nAlternatively, you can tap a custom action manually to execute it immediately."
+            android:text="Define up to 5 actions. Tap here to update the action list and randomly execute the actions via a switch toggle. \n\nAlternatively, you can tap a custom action manually to execute it immediately."
             />
 
     </LinearLayout>

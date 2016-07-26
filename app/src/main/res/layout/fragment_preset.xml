@@ -15,11 +15,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/togglePresetTextView"
         android:paddingLeft="20dp"
-        android:paddingTop="10dp"
+        android:paddingTop="15dp"
         android:maxLines="10"
         android:paddingRight="20dp"
-        android:text="Tap here to set the box to Preset Mode. Toggling the switch will then randomly execute one of the preset actions.\n\nAlternatively, you can select a preset action to execute it immediately."
+        android:text="Tap here to set the box to Preset Mode. Toggling the switch will then randomly execute one of the preset actions.\n\nAlternatively, you can tap a preset action manually to execute it immediately."
         />
 
     </LinearLayout>

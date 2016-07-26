@@ -53,7 +53,7 @@ public class CustomFragment extends Fragment {
     public static ArrayList<String> name = new ArrayList<>();
     public static ArrayList<String> info = new ArrayList<>();
     public static ArrayList<String> letters = new ArrayList<>();
-    String json = "";
+    private String json = "";
 
     private ImageButton mFab;
     private FrameLayout mFabContainer;
@@ -193,9 +193,70 @@ public class CustomFragment extends Fragment {
     }
 
     private void onToggleCustomPressed() {
+        for (int i = 0; i < name.size(); i++) {
+            Log.d(TAG, i + ". " + name.get(i));
+        }
+
+        for (int i = 0; i < info.size(); i++) {
+            Log.d(TAG, i + ". " + info.get(i));
+        }
+
+        //Create json from letters ArrayList
+        json = "{\"type\":1, \"data\":[";
+
+        for(String member : letters) {
+            json += "\"" + member + "\",";
+        }
+
+        json = json.substring(0, json.length() - 1);
+        json += "]}";
+
+        new Thread() {
+            @Override
+            public void run() {
+                // Make the Particle call here
+
+                ArrayList<String> jsonList = new ArrayList<>();
+                ArrayList<String> toggleType = new ArrayList<>();
+                jsonList.add(json);
+                jsonList.add("CUSTOM");
+
+                try {
+                    ParticleCloudSDK.getCloud().logIn("umar.bhutta@hotmail.com", "560588123rocks");
+                    currDevice = ParticleCloudSDK.getCloud().getDevice("1e003d001747343337363432");
+
+                    int resultCode = currDevice.callFunction("toggleType", toggleType);
+                    currDevice.callFunction("jsonParser", jsonList);
+
+                    //capture resultCode from particle function to toast to user
+                    if (resultCode == 1) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getActivity(), "Custom Mode - action list updated.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getActivity(), "Failed to enable Custom Mode and update action list.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                    e.printStackTrace();
+                }
+                jsonList.clear();
+                toggleType.clear();
+            }
+        }.start();
     }
 
     private void onCancelButtonPressed(final View view) {
+        reverseAnimation(view);
+    }
+
+    private void reverseAnimation(final View view) {
         ViewGroup transitionRoot = mRelativeLayout;
 
         Scene originalScene = Scene.getSceneForLayout(transitionRoot, R.layout.fragment_custom, view.getContext());
@@ -323,78 +384,7 @@ public class CustomFragment extends Fragment {
 
         letters.add(customLetters);
 
-        ViewGroup transitionRoot = mRelativeLayout;
-
-        Scene originalScene = Scene.getSceneForLayout(transitionRoot, R.layout.fragment_custom, view.getContext());
-
-        originalScene.setEnterAction(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < name.size(); i++) {
-                    Log.d(TAG, i + ". " + name.get(i));
-                }
-
-                for (int i = 0; i < info.size(); i++) {
-                    Log.d(TAG, i + ". " + info.get(i));
-                }
-
-                //Create json from letters ArrayList
-                json = "{\"type\":1, \"data\":[";
-
-                for(String member : letters) {
-                    json += "\"" + member + "\",";
-                }
-
-                json = json.substring(0, json.length() - 1);
-                json += "]}";
-
-                new Thread() {
-                    @Override
-                    public void run() {
-                        // Make the Particle call here
-
-                        ArrayList<String> jsonList = new ArrayList<>();
-                        jsonList.add(json);
-
-                        try {
-                            ParticleCloudSDK.getCloud().logIn("umar.bhutta@hotmail.com", "560588123rocks");
-                            currDevice = ParticleCloudSDK.getCloud().getDevice("1e003d001747343337363432");
-
-                            int resultCode = currDevice.callFunction("jsonParser", jsonList);
-
-                            //capture resultCode from particle function to toast to user
-                            if (resultCode == 1) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        Toast.makeText(getActivity(), "Successfully added action to the list.", Toast.LENGTH_SHORT).show();
-                                        Log.d(TAG, "Successfully added action to the list.");
-                                    }
-                                });
-                            } else {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        Toast.makeText(getActivity(), "No new actions were added to the list.", Toast.LENGTH_SHORT).show();
-                                        Log.d(TAG, "No new actions were added to the list.");
-                                    }
-                                });
-                            }
-
-                        } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
-                            e.printStackTrace();
-                        }
-                        jsonList.clear();
-                    }
-                }.start();
-
-
-                bindViews(view);
-                setupList(view);
-
-                mRevealFlag = false;
-            }
-        });
-
-        TransitionManager.go(originalScene, new ChangeTransform());
+        reverseAnimation(view);
     }
 
 

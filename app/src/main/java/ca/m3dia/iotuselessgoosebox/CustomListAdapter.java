@@ -81,47 +81,10 @@ public class CustomListAdapter extends RecyclerView.Adapter {
             if (v == customDelete) {
                 delete(getLayoutPosition());
 
-                //send updated info to Particle cloud
-
-                //Create json from letters ArrayList
-                String json = "{\"type\":1, \"data\":[";
-
-                for(String member : CustomFragment.letters) {
-                    json += "\"" + member + "\",";
-                }
-
-                json = json.substring(0, json.length() - 1);
-                json += "]}";
-
-                final String finalJson = json;
-                new Thread() {
-                    @Override
-                    public void run() {
-                        // Make the Particle call here
-
-                        ArrayList<String> jsonList = new ArrayList<>();
-                        jsonList.add(finalJson);
-
-                        try {
-                            ParticleCloudSDK.getCloud().logIn("umar.bhutta@hotmail.com", "560588123rocks");
-                            ParticleDevice currDevice = ParticleCloudSDK.getCloud().getDevice("1e003d001747343337363432");
-
-                            int resultCode = currDevice.callFunction("jsonParser", jsonList);
-
-                        } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
-                            e.printStackTrace();
-                        }
-                        jsonList.clear();
-                    }
-                }.start();
-
-
                 Toast.makeText(mContext, "Custom item " + (getLayoutPosition() + 1) +  " has been deleted.", Toast.LENGTH_SHORT).show();
-
-
             } else {
                 final String sequence = CustomFragment.letters.get(getLayoutPosition());
-                Toast.makeText(mContext, sequence, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, sequence + " triggered.", Toast.LENGTH_SHORT).show();
 
                 new Thread() {
                     @Override
