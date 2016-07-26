@@ -22,7 +22,7 @@ public class PresetFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
 
         //setup adapter
-        PresetListAdapter presetListAdapter = new PresetListAdapter();
+        PresetListAdapter presetListAdapter = new PresetListAdapter(getActivity());
         //attach adapter to recycler view
         recyclerView.setAdapter(presetListAdapter);
 

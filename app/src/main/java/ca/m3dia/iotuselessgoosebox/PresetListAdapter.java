@@ -1,17 +1,32 @@
 package ca.m3dia.iotuselessgoosebox;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import io.particle.android.sdk.cloud.ParticleCloudException;
+import io.particle.android.sdk.cloud.ParticleCloudSDK;
+import io.particle.android.sdk.cloud.ParticleDevice;
 
 /**
  * Created by Datatellit1 on 7/21/2016.
  */
 public class PresetListAdapter extends RecyclerView.Adapter {
+    private Context mContext;
+
+    public PresetListAdapter(Context context) {
+        mContext = context;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.preset_list_item, parent, false);
@@ -51,6 +66,29 @@ public class PresetListAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View v) {
+            int pos = getLayoutPosition() + 1;
+            final String presetTrigger = pos + "";
+            Toast.makeText(mContext, Common.presetTitles[getLayoutPosition()] + " triggered.", Toast.LENGTH_SHORT).show();
+
+            new Thread() {
+                @Override
+                public void run() {
+                    // Make the Particle call here
+                    ArrayList<String> immediateAction = new ArrayList<>();
+                    immediateAction.add(presetTrigger);
+
+                    try {
+                        ParticleCloudSDK.getCloud().logIn("umar.bhutta@hotmail.com", "560588123rocks");
+                        ParticleDevice currDevice = ParticleCloudSDK.getCloud().getDevice("1e003d001747343337363432");
+
+                        currDevice.callFunction("pre-test", immediateAction);
+
+                    } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                        e.printStackTrace();
+                    }
+                    immediateAction.clear();
+                }
+            }.start();
 
         }
     }

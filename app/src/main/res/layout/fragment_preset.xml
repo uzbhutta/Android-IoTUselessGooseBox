@@ -10,7 +10,20 @@
         android:elevation="3dp"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:orientation="horizontal"/>
+        android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:maxLines="10"
+        android:paddingRight="20dp"
+        android:text="Tap here to set the box to Preset Mode. Toggling the switch will then randomly execute one of the preset actions.\n\nAlternatively, you can select a preset action to execute it immediately."
+        />
+
+    </LinearLayout>
+
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -77,43 +90,8 @@
             android:layout_gravity="center"
             >
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:scaleX="0"
-                android:scaleY="0"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_rewind_white_24dp"
-                />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:scaleX="0"
-                android:scaleY="0"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="72dp"
-                android:layout_marginRight="72dp"
-                android:src="@drawable/ic_play_white_24dp"
-                />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:scaleX="0"
-                android:scaleY="0"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_fast_forward_white_24dp"
-                />
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/fab"
-            android:transitionName="button_fab"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:layout_gravity="top|right"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:background="@drawable/ripple"
-            android:elevation="12dp"
-            />
 
     </FrameLayout>
 

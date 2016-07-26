@@ -1,16 +1,41 @@
 package ca.m3dia.iotuselessgoosebox;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import io.particle.android.sdk.cloud.ParticleCloudException;
+import io.particle.android.sdk.cloud.ParticleCloudSDK;
+import io.particle.android.sdk.cloud.ParticleDevice;
 
 /**
- * Created by Datatellit1 on 7/21/2016.
+ * Created by Umar Bhutta.
  */
 public class CustomListAdapter extends RecyclerView.Adapter {
+
+    Context mContext;
+
+    public CustomListAdapter(Context context) {
+        mContext = context;
+    }
+
+    public void delete(int pos) {
+        CustomFragment.name.remove(pos);
+        CustomFragment.info.remove(pos);
+        CustomFragment.letters.remove(pos);
+
+        notifyItemRemoved(pos);
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_list_item, parent, false);
@@ -41,6 +66,7 @@ public class CustomListAdapter extends RecyclerView.Adapter {
             customDelete = (ImageView) itemView.findViewById(R.id.customDelete);
 
             itemView.setOnClickListener(this);
+            customDelete.setOnClickListener(this);
         }
 
         public void bindView(int pos) {
@@ -52,7 +78,71 @@ public class CustomListAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View v) {
+            if (v == customDelete) {
+                delete(getLayoutPosition());
 
+                //send updated info to Particle cloud
+
+                //Create json from letters ArrayList
+                String json = "{\"type\":1, \"data\":[";
+
+                for(String member : CustomFragment.letters) {
+                    json += "\"" + member + "\",";
+                }
+
+                json = json.substring(0, json.length() - 1);
+                json += "]}";
+
+                final String finalJson = json;
+                new Thread() {
+                    @Override
+                    public void run() {
+                        // Make the Particle call here
+
+                        ArrayList<String> jsonList = new ArrayList<>();
+                        jsonList.add(finalJson);
+
+                        try {
+                            ParticleCloudSDK.getCloud().logIn("umar.bhutta@hotmail.com", "560588123rocks");
+                            ParticleDevice currDevice = ParticleCloudSDK.getCloud().getDevice("1e003d001747343337363432");
+
+                            int resultCode = currDevice.callFunction("jsonParser", jsonList);
+
+                        } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                            e.printStackTrace();
+                        }
+                        jsonList.clear();
+                    }
+                }.start();
+
+
+                Toast.makeText(mContext, "Custom item " + (getLayoutPosition() + 1) +  " has been deleted.", Toast.LENGTH_SHORT).show();
+
+
+            } else {
+                final String sequence = CustomFragment.letters.get(getLayoutPosition());
+                Toast.makeText(mContext, sequence, Toast.LENGTH_SHORT).show();
+
+                new Thread() {
+                    @Override
+                    public void run() {
+                        // Make the Particle call here
+                        ArrayList<String> immediateAction = new ArrayList<>();
+                        immediateAction.add(sequence);
+
+                        try {
+                            ParticleCloudSDK.getCloud().logIn("umar.bhutta@hotmail.com", "560588123rocks");
+                            ParticleDevice currDevice = ParticleCloudSDK.getCloud().getDevice("1e003d001747343337363432");
+
+                            currDevice.callFunction("cus-test", immediateAction);
+
+                        } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                            e.printStackTrace();
+                        }
+                        immediateAction.clear();
+                    }
+                }.start();
+            }
         }
     }
 }

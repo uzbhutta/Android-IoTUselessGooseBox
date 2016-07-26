@@ -4,17 +4,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.AutoTransition;
-import android.transition.ChangeBounds;
 import android.transition.ChangeTransform;
-import android.transition.Explode;
-import android.transition.Fade;
 import android.transition.Scene;
 import android.transition.TransitionManager;
 import android.util.Log;
@@ -27,9 +23,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -38,14 +36,13 @@ import java.util.ArrayList;
 import ca.m3dia.iotuselessgoosebox.lib.AnimatorPath;
 import ca.m3dia.iotuselessgoosebox.lib.PathEvaluator;
 import ca.m3dia.iotuselessgoosebox.lib.PathPoint;
-import ca.m3dia.iotuselessgoosebox.lib.ReverseInterpolator;
 import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 
 /**
- * Created by umarb_000 on 2016-07-20.
+ * Created by Umar Bhutta.
  */
 public class CustomFragment extends Fragment {
     private static final String TAG = CustomFragment.class.getSimpleName();
@@ -58,7 +55,7 @@ public class CustomFragment extends Fragment {
     public static ArrayList<String> letters = new ArrayList<>();
     String json = "";
 
-    private View mFab;
+    private ImageButton mFab;
     private FrameLayout mFabContainer;
     private LinearLayout mControlsContainer;
     private RelativeLayout mRelativeLayout;
@@ -70,6 +67,7 @@ public class CustomFragment extends Fragment {
     private Spinner redLedSpinner;
     private Spinner armSpinner;
     private Spinner soundSpinner;
+    private TextView toggleCustomTextView;
 
     ParticleDevice currDevice;
 
@@ -90,11 +88,12 @@ public class CustomFragment extends Fragment {
     private String customInfo;
     private String customLetters;
 
-
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_custom, container, false);
+
+
 
         mFabSize = getResources().getDimensionPixelSize(R.dimen.fab_size);
         bindViews(view);
@@ -110,7 +109,7 @@ public class CustomFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
 
         //setup adapter
-        CustomListAdapter customListAdapter = new CustomListAdapter();
+        CustomListAdapter customListAdapter = new CustomListAdapter(getActivity());
         //attach adapter to recycler view
         recyclerView.setAdapter(customListAdapter);
 
@@ -121,7 +120,7 @@ public class CustomFragment extends Fragment {
     }
 
     private void bindViews(final View view) {
-        mFab = view.findViewById(R.id.fab);
+        mFab = (ImageButton) view.findViewById(R.id.fab);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 onFabPressed(v);
@@ -132,7 +131,7 @@ public class CustomFragment extends Fragment {
         mFabContainer = (FrameLayout) view.findViewById(R.id.fab_container);
         mControlsContainer = (LinearLayout) view.findViewById(R.id.add_custom_container);
         mFabContainer.bringToFront();
-
+        toggleCustomTextView = (TextView) view.findViewById(R.id.toggleCustomTextView);
         nameEditText = (EditText) view.findViewById(R.id.nameEditText);
         addButton = (Button) view.findViewById(R.id.addButton);
         cancelButton = (Button) view.findViewById(R.id.cancelButton);
@@ -173,185 +172,234 @@ public class CustomFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lidAction = lidSpinner.getSelectedItem().toString();
-                lidLedAction = lidLedSpinner.getSelectedItem().toString();
-                redLedAction = redLedSpinner.getSelectedItem().toString();
-                armAction = armSpinner.getSelectedItem().toString();
-                soundAction = soundSpinner.getSelectedItem().toString();
-
-                customName = nameEditText.getText().toString();
-                customInfo = lidAction + ", " + lidLedAction + ", " + redLedAction + ", " +
-                        armAction + ", " + soundAction;
-
-                name.add(customName);
-                info.add(customInfo);
-
-                switch(lidAction) {
-                    case "Normal":
-                        customLetters = "A";
-                        break;
-                    case "Fast":
-                        customLetters = "B";
-                        break;
-                    case "Slow":
-                        customLetters = "C";
-                        break;
-                    case "Shake":
-                        customLetters = "D";
-                        break;
-                    default:
-                        customLetters = "A";
-                        break;
-                }
-
-                switch(lidLedAction) {
-                    case "On":
-                        customLetters += "A";
-                        break;
-                    case "Delayed On":
-                        customLetters += "B";
-                        break;
-                    case "Off":
-                        customLetters += "C";
-                        break;
-                    case "Flicker":
-                        customLetters += "D";
-                        break;
-                    default:
-                        customLetters += "C";
-                        break;
-                }
-
-                switch(redLedAction) {
-                    case "On":
-                        customLetters += "A";
-                        break;
-                    case "Delayed On":
-                        customLetters += "B";
-                        break;
-                    case "Off":
-                        customLetters += "C";
-                        break;
-                    case "Flicker":
-                        customLetters += "D";
-                        break;
-                    default:
-                        customLetters += "C";
-                        break;
-                }
-
-                switch(armAction) {
-                    case "Normal":
-                        customLetters += "A";
-                        break;
-                    case "Fast":
-                        customLetters += "B";
-                        break;
-                    case "Slow":
-                        customLetters += "C";
-                        break;
-                    case "Shake":
-                        customLetters += "D";
-                        break;
-                    default:
-                        customLetters += "A";
-                        break;
-                }
-
-                switch(soundAction) {
-                    case "On":
-                        customLetters += "A";
-                        break;
-                    case "Off":
-                        customLetters += "B";
-                        break;
-                    default:
-                        customLetters += "B";
-                        break;
-                }
-
-                ViewGroup transitionRoot = mRelativeLayout;
-
-                Scene originalScene = Scene.getSceneForLayout(transitionRoot, R.layout.fragment_custom, view.getContext());
-
-                originalScene.setEnterAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < name.size(); i++) {
-                            Log.d(TAG, i + ". " + name.get(i));
-                        }
-
-                        for (int i = 0; i < info.size(); i++) {
-                            Log.d(TAG, i + ". " + info.get(i));
-                        }
-
-                        //Create json from letters ArrayList
-                        json = "{\"type\":1, \"data\":[";
-
-                        for(String member : letters) {
-                            json += "\"" + member + "\",";
-                        }
-
-                        json = json.substring(0, json.length() - 1);
-                        json += "]}";
-
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                // Make the Particle call here
-
-                                ArrayList<String> jsonList = new ArrayList<>();
-                                jsonList.add(json);
-
-                                try {
-                                    ParticleCloudSDK.getCloud().logIn("umar.bhutta@hotmail.com", "560588123rocks");
-                                    currDevice = ParticleCloudSDK.getCloud().getDevice("31001c000e47343432313031");
-
-                                    int resultCode = currDevice.callFunction("jsonParser", jsonList);
-
-                                    //capture resultCode from particle function to toast to user
-                                    if (resultCode == 1) {
-                                        getActivity().runOnUiThread(new Runnable() {
-                                            public void run() {
-                                                Toast.makeText(getActivity(), "Successfully added action to the list.", Toast.LENGTH_LONG).show();
-                                                Log.d(TAG, "Successfully added action to the list.");
-                                            }
-                                        });
-                                    } else {
-                                        getActivity().runOnUiThread(new Runnable() {
-                                            public void run() {
-                                                Toast.makeText(getActivity(), "No new actions were added to the list.", Toast.LENGTH_LONG).show();
-                                                Log.d(TAG, "No new actions were added to the list.");
-                                            }
-                                        });
-                                    }
-
-                                } catch (ParticleCloudException e) {
-                                    e.printStackTrace();
-                                } catch (ParticleDevice.FunctionDoesNotExistException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                jsonList.clear();
-                            }
-                        }.start();
-
-
-                        bindViews(view);
-                        setupList(view);
-
-                        mRevealFlag = false;
-                    }
-                });
-
-                TransitionManager.go(originalScene, new ChangeTransform());
+                onAddButtonPressed(view);
             }
         });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCancelButtonPressed(view);
+            }
+        });
+
+        toggleCustomTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onToggleCustomPressed();
+            }
+        });
+
+    }
+
+    private void onToggleCustomPressed() {
+    }
+
+    private void onCancelButtonPressed(final View view) {
+        ViewGroup transitionRoot = mRelativeLayout;
+
+        Scene originalScene = Scene.getSceneForLayout(transitionRoot, R.layout.fragment_custom, view.getContext());
+
+        originalScene.setEnterAction(new Runnable() {
+            @Override
+            public void run() {
+                bindViews(view);
+                mFab.setImageDrawable(null);
+                setupList(view);
+
+                mRevealFlag = false;
+            }
+        });
+
+        TransitionManager.go(originalScene, new ChangeTransform());
+
+        //TODO: Animate this in
+        Drawable plus = getResources().getDrawable(R.drawable.ic_add_black_24dp);
+        mFab.setImageDrawable(plus);
+    }
+
+    private void onAddButtonPressed(final View view) {
+        mFab.setImageDrawable(null);
+
+        //reset buffer
+        customLetters = "";
+
+        lidAction = lidSpinner.getSelectedItem().toString();
+        lidLedAction = lidLedSpinner.getSelectedItem().toString();
+        redLedAction = redLedSpinner.getSelectedItem().toString();
+        armAction = armSpinner.getSelectedItem().toString();
+        soundAction = soundSpinner.getSelectedItem().toString();
+
+        customName = nameEditText.getText().toString();
+        customInfo = lidAction + ", " + lidLedAction + ", " + redLedAction + ", " +
+                armAction + ", " + soundAction;
+
+        name.add(customName);
+        info.add(customInfo);
+
+        switch(lidAction) {
+            case "Normal":
+                customLetters = "A";
+                break;
+            case "Fast":
+                customLetters = "B";
+                break;
+            case "Slow":
+                customLetters = "C";
+                break;
+            case "Shake":
+                customLetters = "D";
+                break;
+            default:
+                customLetters = "A";
+                break;
+        }
+
+        switch(lidLedAction) {
+            case "On":
+                customLetters += "A";
+                break;
+            case "Delayed On":
+                customLetters += "B";
+                break;
+            case "Off":
+                customLetters += "C";
+                break;
+            case "Flicker":
+                customLetters += "D";
+                break;
+            default:
+                customLetters += "C";
+                break;
+        }
+
+        switch(redLedAction) {
+            case "On":
+                customLetters += "A";
+                break;
+            case "Delayed On":
+                customLetters += "B";
+                break;
+            case "Off":
+                customLetters += "C";
+                break;
+            case "Flicker":
+                customLetters += "D";
+                break;
+            default:
+                customLetters += "C";
+                break;
+        }
+
+        switch(armAction) {
+            case "Normal":
+                customLetters += "A";
+                break;
+            case "Fast":
+                customLetters += "B";
+                break;
+            case "Slow":
+                customLetters += "C";
+                break;
+            case "Shake":
+                customLetters += "D";
+                break;
+            default:
+                customLetters += "A";
+                break;
+        }
+
+        switch(soundAction) {
+            case "On":
+                customLetters += "A";
+                break;
+            case "Off":
+                customLetters += "B";
+                break;
+            default:
+                customLetters += "B";
+                break;
+        }
+
+        letters.add(customLetters);
+
+        ViewGroup transitionRoot = mRelativeLayout;
+
+        Scene originalScene = Scene.getSceneForLayout(transitionRoot, R.layout.fragment_custom, view.getContext());
+
+        originalScene.setEnterAction(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < name.size(); i++) {
+                    Log.d(TAG, i + ". " + name.get(i));
+                }
+
+                for (int i = 0; i < info.size(); i++) {
+                    Log.d(TAG, i + ". " + info.get(i));
+                }
+
+                //Create json from letters ArrayList
+                json = "{\"type\":1, \"data\":[";
+
+                for(String member : letters) {
+                    json += "\"" + member + "\",";
+                }
+
+                json = json.substring(0, json.length() - 1);
+                json += "]}";
+
+                new Thread() {
+                    @Override
+                    public void run() {
+                        // Make the Particle call here
+
+                        ArrayList<String> jsonList = new ArrayList<>();
+                        jsonList.add(json);
+
+                        try {
+                            ParticleCloudSDK.getCloud().logIn("umar.bhutta@hotmail.com", "560588123rocks");
+                            currDevice = ParticleCloudSDK.getCloud().getDevice("1e003d001747343337363432");
+
+                            int resultCode = currDevice.callFunction("jsonParser", jsonList);
+
+                            //capture resultCode from particle function to toast to user
+                            if (resultCode == 1) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        Toast.makeText(getActivity(), "Successfully added action to the list.", Toast.LENGTH_SHORT).show();
+                                        Log.d(TAG, "Successfully added action to the list.");
+                                    }
+                                });
+                            } else {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        Toast.makeText(getActivity(), "No new actions were added to the list.", Toast.LENGTH_SHORT).show();
+                                        Log.d(TAG, "No new actions were added to the list.");
+                                    }
+                                });
+                            }
+
+                        } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                            e.printStackTrace();
+                        }
+                        jsonList.clear();
+                    }
+                }.start();
+
+
+                bindViews(view);
+                setupList(view);
+
+                mRevealFlag = false;
+            }
+        });
+
+        TransitionManager.go(originalScene, new ChangeTransform());
     }
 
 
     public void onFabPressed(View view) {
+        mFab.setImageDrawable(null);
         final float startX = mFab.getX();
 
         AnimatorPath path = new AnimatorPath();
