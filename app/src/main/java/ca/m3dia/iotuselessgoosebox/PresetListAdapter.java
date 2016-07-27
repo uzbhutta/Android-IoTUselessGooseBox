@@ -79,7 +79,7 @@ public class PresetListAdapter extends RecyclerView.Adapter {
 
                     try {
                         ParticleCloudSDK.getCloud().logIn("umar.bhutta@hotmail.com", "560588123rocks");
-                        ParticleDevice currDevice = ParticleCloudSDK.getCloud().getDevice("1e003d001747343337363432");
+                        ParticleDevice currDevice = ParticleCloudSDK.getCloud().getDevice("31001c000e47343432313031");
 
                         currDevice.callFunction("pre-test", immediateAction);
 

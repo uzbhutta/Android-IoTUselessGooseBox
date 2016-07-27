@@ -2,6 +2,7 @@ package ca.m3dia.iotuselessgoosebox;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.graphics.drawable.Drawable;
@@ -19,6 +20,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -219,11 +224,11 @@ public class CustomFragment extends Fragment {
                 ArrayList<String> jsonList = new ArrayList<>();
                 ArrayList<String> toggleType = new ArrayList<>();
                 jsonList.add(json);
-                jsonList.add("CUSTOM");
+                toggleType.add("CUSTOM");
 
                 try {
                     ParticleCloudSDK.getCloud().logIn("umar.bhutta@hotmail.com", "560588123rocks");
-                    currDevice = ParticleCloudSDK.getCloud().getDevice("1e003d001747343337363432");
+                    currDevice = ParticleCloudSDK.getCloud().getDevice("31001c000e47343432313031");
 
                     int resultCode = currDevice.callFunction("toggleType", toggleType);
                     currDevice.callFunction("jsonParser", jsonList);
@@ -275,8 +280,10 @@ public class CustomFragment extends Fragment {
         TransitionManager.go(originalScene, new ChangeTransform());
 
         //TODO: Animate this in
-        Drawable plus = getResources().getDrawable(R.drawable.ic_add_black_24dp);
-        mFab.setImageDrawable(plus);
+
+
+//        Drawable plus = getResources().getDrawable(R.drawable.ic_add_black_24dp);
+//        mFab.setImageDrawable(plus);
     }
 
     private void onAddButtonPressed(final View view) {

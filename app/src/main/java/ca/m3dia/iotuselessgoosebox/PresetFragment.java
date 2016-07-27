@@ -57,11 +57,11 @@ public class PresetFragment extends Fragment {
                         ArrayList<String> jsonList = new ArrayList<>();
                         ArrayList<String> toggleType = new ArrayList<>();
                         jsonList.add(json);
-                        jsonList.add("PRESET");
+                        toggleType.add("PRESET");
 
                         try {
                             ParticleCloudSDK.getCloud().logIn("umar.bhutta@hotmail.com", "560588123rocks");
-                            currDevice = ParticleCloudSDK.getCloud().getDevice("1e003d001747343337363432");
+                            currDevice = ParticleCloudSDK.getCloud().getDevice("31001c000e47343432313031");
 
                             int resultCode = currDevice.callFunction("toggleType", toggleType);
                             currDevice.callFunction("jsonParser", jsonList);
