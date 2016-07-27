@@ -105,8 +105,6 @@ public class CustomFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_custom, container, false);
 
-
-
         mFabSize = getResources().getDimensionPixelSize(R.dimen.fab_size);
         bindViews(view);
         setupList(view);
@@ -183,6 +181,13 @@ public class CustomFragment extends Fragment {
                 R.layout.spinner_textview_align, getResources().getStringArray(R.array.sound_spinner));
         soundAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         soundSpinner.setAdapter(soundAdapter);
+
+        nameEditText.setVisibility(View.INVISIBLE);
+        lidSpinner.setVisibility(View.INVISIBLE);
+        lidLedSpinner.setVisibility(View.INVISIBLE);
+        redLedSpinner.setVisibility(View.INVISIBLE);
+        armSpinner.setVisibility(View.INVISIBLE);
+        soundSpinner.setVisibility(View.INVISIBLE);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -293,10 +298,6 @@ public class CustomFragment extends Fragment {
         });
 
         TransitionManager.go(originalScene, new ChangeImageTransform());
-
-        //TODO: Animate this in
-//        Drawable plus = getResources().getDrawable(R.drawable.ic_add_black_24dp);
-//        mFab.setImageDrawable(plus);
     }
 
     private void onAddButtonPressed(final View view) {
@@ -413,6 +414,13 @@ public class CustomFragment extends Fragment {
             Toast.makeText(getActivity(), "Delete actions before adding new ones.", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        nameEditText.setVisibility(View.VISIBLE);
+        lidSpinner.setVisibility(View.VISIBLE);
+        lidLedSpinner.setVisibility(View.VISIBLE);
+        redLedSpinner.setVisibility(View.VISIBLE);
+        armSpinner.setVisibility(View.VISIBLE);
+        soundSpinner.setVisibility(View.VISIBLE);
 
         mFab.setImageDrawable(null);
         final float startX = mFab.getX();
