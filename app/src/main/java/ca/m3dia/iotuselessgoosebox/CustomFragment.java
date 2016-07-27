@@ -58,47 +58,30 @@ import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
  */
 public class CustomFragment extends Fragment {
     private static final String TAG = CustomFragment.class.getSimpleName();
-    public static String CUSTOM_NAME = "CUSTOM_NAME";
-    public static String CUSTOM_INFO = "CUSTOM_INFO";
-    public static String CUSTOM_LETTERS = "CUSTOM_LETTERS";
-
-    public static ArrayList<String> name = new ArrayList<>();
-    public static ArrayList<String> info = new ArrayList<>();
-    public static ArrayList<String> letters = new ArrayList<>();
-    private String json = "";
-
-    private ImageButton mFab;
-    private FrameLayout mFabContainer;
-    private LinearLayout mControlsContainer;
-    private RelativeLayout mRelativeLayout;
-
-    private EditText nameEditText;
-    Button addButton, cancelButton;
-    private Spinner lidSpinner;
-    private Spinner lidLedSpinner;
-    private Spinner redLedSpinner;
-    private Spinner armSpinner;
-    private Spinner soundSpinner;
-    private TextView toggleCustomTextView;
-
     ParticleDevice currDevice;
 
     public final static float SCALE_FACTOR      = 13f;
     public final static int ANIMATION_DURATION  = 300;
     public final static int MINIMUN_X_DISTANCE  = 200;
 
+    public static ArrayList<String> name = new ArrayList<>();
+    public static ArrayList<String> info = new ArrayList<>();
+    public static ArrayList<String> letters = new ArrayList<>();
+
+    private String json = "";
     private boolean mRevealFlag;
     private float mFabSize;
 
-    private String lidAction;
-    private String lidLedAction;
-    private String redLedAction;
-    private String armAction;
-    private String soundAction;
+    private ImageButton mFab;
+    private FrameLayout mFabContainer;
+    private LinearLayout mControlsContainer;
+    private RelativeLayout mRelativeLayout;
 
-    private String customName;
-    private String customInfo;
-    private String customLetters;
+    private TextView toggleCustomTextView;
+    private EditText nameEditText;
+    private Spinner lidSpinner, lidLedSpinner, redLedSpinner, armSpinner, soundSpinner;
+    private Button addButton, cancelButton;
+
 
     @Nullable
     @Override
@@ -304,16 +287,16 @@ public class CustomFragment extends Fragment {
         mFab.setImageDrawable(null);
 
         //reset buffer
-        customLetters = "";
+        String customLetters = "";
 
-        lidAction = lidSpinner.getSelectedItem().toString();
-        lidLedAction = lidLedSpinner.getSelectedItem().toString();
-        redLedAction = redLedSpinner.getSelectedItem().toString();
-        armAction = armSpinner.getSelectedItem().toString();
-        soundAction = soundSpinner.getSelectedItem().toString();
+        String lidAction = lidSpinner.getSelectedItem().toString();
+        String lidLedAction = lidLedSpinner.getSelectedItem().toString();
+        String redLedAction = redLedSpinner.getSelectedItem().toString();
+        String armAction = armSpinner.getSelectedItem().toString();
+        String soundAction = soundSpinner.getSelectedItem().toString();
 
-        customName = nameEditText.getText().toString();
-        customInfo = lidAction + ", " + lidLedAction + ", " + redLedAction + ", " +
+        String customName = nameEditText.getText().toString();
+        String customInfo = lidAction + ", " + lidLedAction + ", " + redLedAction + ", " +
                 armAction + ", " + soundAction;
 
         name.add(customName);
