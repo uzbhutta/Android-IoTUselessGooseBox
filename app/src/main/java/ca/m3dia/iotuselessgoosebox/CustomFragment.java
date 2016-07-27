@@ -11,9 +11,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.AutoTransition;
+import android.transition.ChangeBounds;
+import android.transition.ChangeClipBounds;
+import android.transition.ChangeImageTransform;
 import android.transition.ChangeTransform;
+import android.transition.Explode;
 import android.transition.Scene;
+import android.transition.Slide;
 import android.transition.TransitionManager;
+import android.transition.TransitionSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -143,35 +150,35 @@ public class CustomFragment extends Fragment {
 
         lidSpinner = (Spinner) view.findViewById(R.id.lidSpinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> lidAdapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.lid_spinner, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> lidAdapter = new ArrayAdapter<CharSequence>(getContext(),
+                R.layout.spinner_textview_align, getResources().getStringArray(R.array.lid_spinner));
         // Specify the layout to use when the list of choices appears
         lidAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the lidAdapter to the spinner
         lidSpinner.setAdapter(lidAdapter);
 
         lidLedSpinner = (Spinner) view.findViewById(R.id.lidLedSpinner);
-        ArrayAdapter<CharSequence> lidLedAdapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.lid_led_spinner, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> lidLedAdapter = new ArrayAdapter<CharSequence>(getContext(),
+                R.layout.spinner_textview_align, getResources().getStringArray(R.array.lid_led_spinner));
         lidLedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         lidLedSpinner.setAdapter(lidLedAdapter);
 
         redLedSpinner = (Spinner) view.findViewById(R.id.redLedSpinner);
-        ArrayAdapter<CharSequence> redLedAdapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.red_led_spinner, android.R.layout.simple_spinner_item);
-        redLedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> redLedAdapter = new ArrayAdapter<CharSequence>(getContext(),
+                R.layout.spinner_textview_align, getResources().getStringArray(R.array.red_led_spinner));
+        lidLedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         redLedSpinner.setAdapter(redLedAdapter);
 
         armSpinner = (Spinner) view.findViewById(R.id.armSpinner);
-        ArrayAdapter<CharSequence> armAdapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.arm_spinner, android.R.layout.simple_spinner_item);
-        armAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> armAdapter = new ArrayAdapter<CharSequence>(getContext(),
+                R.layout.spinner_textview_align, getResources().getStringArray(R.array.arm_spinner));
+        lidLedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         armSpinner.setAdapter(armAdapter);
 
         soundSpinner = (Spinner) view.findViewById(R.id.soundSpinner);
-        ArrayAdapter<CharSequence> soundAdapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.sound_spinner, android.R.layout.simple_spinner_item);
-        soundAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> soundAdapter = new ArrayAdapter<CharSequence>(getContext(),
+                R.layout.spinner_textview_align, getResources().getStringArray(R.array.sound_spinner));
+        lidLedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         soundSpinner.setAdapter(soundAdapter);
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -265,23 +272,26 @@ public class CustomFragment extends Fragment {
         ViewGroup transitionRoot = mRelativeLayout;
 
         Scene originalScene = Scene.getSceneForLayout(transitionRoot, R.layout.fragment_custom, view.getContext());
-
+        originalScene.setExitAction(new Runnable() {
+            @Override
+            public void run() {
+                mControlsContainer.setVisibility(View.GONE);
+            }
+        });
         originalScene.setEnterAction(new Runnable() {
             @Override
             public void run() {
                 bindViews(view);
-                mFab.setImageDrawable(null);
+                //mFab.setImageDrawable(null);
                 setupList(view);
 
                 mRevealFlag = false;
             }
         });
 
-        TransitionManager.go(originalScene, new ChangeTransform());
+        TransitionManager.go(originalScene, new ChangeImageTransform());
 
         //TODO: Animate this in
-
-
 //        Drawable plus = getResources().getDrawable(R.drawable.ic_add_black_24dp);
 //        mFab.setImageDrawable(plus);
     }
@@ -444,8 +454,7 @@ public class CustomFragment extends Fragment {
             mFabContainer.setBackgroundColor(getResources()
                     .getColor(R.color.brand_accent));
 
-
-            mControlsContainer.setPadding(0, -400, 0, 0);
+            mControlsContainer.setTranslationY(-200);
 
             for (int i = 0; i < mControlsContainer.getChildCount(); i++) {
                 View v = mControlsContainer.getChildAt(i);

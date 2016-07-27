@@ -42,8 +42,10 @@ public class PresetFragment extends Fragment {
                 //Create json from letters ArrayList
                 json = "{\"type\":0, \"data\":[";
 
+                int i = 0;
                 for(String member : Common.presetTitles) {
-                    json += "\"" + member + "\",";
+                    json += "\"" + i + "\",";
+                    i++;
                 }
 
                 json = json.substring(0, json.length() - 1);
