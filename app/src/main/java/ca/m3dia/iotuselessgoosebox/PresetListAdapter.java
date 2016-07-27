@@ -78,10 +78,7 @@ public class PresetListAdapter extends RecyclerView.Adapter {
                     immediateAction.add(presetTrigger);
 
                     try {
-                        ParticleCloudSDK.getCloud().logIn("umar.bhutta@hotmail.com", "560588123rocks");
-                        ParticleDevice currDevice = ParticleCloudSDK.getCloud().getDevice("31001c000e47343432313031");
-
-                        currDevice.callFunction("pre-test", immediateAction);
+                        Common.currDevice.callFunction("pre-test", immediateAction);
 
                     } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
                         e.printStackTrace();

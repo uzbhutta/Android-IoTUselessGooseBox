@@ -58,7 +58,6 @@ import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
  */
 public class CustomFragment extends Fragment {
     private static final String TAG = CustomFragment.class.getSimpleName();
-    ParticleDevice currDevice;
 
     public final static float SCALE_FACTOR      = 13f;
     public final static int ANIMATION_DURATION  = 300;
@@ -225,11 +224,8 @@ public class CustomFragment extends Fragment {
                 toggleType.add("CUSTOM");
 
                 try {
-                    ParticleCloudSDK.getCloud().logIn("umar.bhutta@hotmail.com", "560588123rocks");
-                    currDevice = ParticleCloudSDK.getCloud().getDevice("31001c000e47343432313031");
-
-                    int resultCode = currDevice.callFunction("toggleType", toggleType);
-                    currDevice.callFunction("jsonParser", jsonList);
+                    int resultCode = Common.currDevice.callFunction("toggleType", toggleType);
+                    Common.currDevice.callFunction("jsonParser", jsonList);
 
                     //capture resultCode from particle function to toast to user
                     if (resultCode == 1) {

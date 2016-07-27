@@ -27,7 +27,6 @@ import io.particle.android.sdk.cloud.ParticleDevice;
 public class PresetFragment extends Fragment {
     private TextView togglePresetTextView;
     private String json = "";
-    ParticleDevice currDevice;
 
     @Nullable
     @Override
@@ -62,11 +61,8 @@ public class PresetFragment extends Fragment {
                         toggleType.add("PRESET");
 
                         try {
-                            ParticleCloudSDK.getCloud().logIn("umar.bhutta@hotmail.com", "560588123rocks");
-                            currDevice = ParticleCloudSDK.getCloud().getDevice("31001c000e47343432313031");
-
-                            int resultCode = currDevice.callFunction("toggleType", toggleType);
-                            currDevice.callFunction("jsonParser", jsonList);
+                            int resultCode = Common.currDevice.callFunction("toggleType", toggleType);
+                            Common.currDevice.callFunction("jsonParser", jsonList);
 
                             //capture resultCode from particle function to toast to user
                             if (resultCode == 1) {

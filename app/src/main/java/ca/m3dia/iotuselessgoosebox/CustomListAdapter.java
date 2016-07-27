@@ -96,10 +96,7 @@ public class CustomListAdapter extends RecyclerView.Adapter {
                         immediateAction.add(sequence);
 
                         try {
-                            ParticleCloudSDK.getCloud().logIn("umar.bhutta@hotmail.com", "560588123rocks");
-                            ParticleDevice currDevice = ParticleCloudSDK.getCloud().getDevice("31001c000e47343432313031");
-
-                            currDevice.callFunction("cus-test", immediateAction);
+                            Common.currDevice.callFunction("cus-test", immediateAction);
 
                         } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
                             e.printStackTrace();
