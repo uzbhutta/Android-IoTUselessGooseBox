@@ -157,9 +157,11 @@
                     <EditText
                         android:id="@+id/nameEditText"
                         android:text=""
-                        android:layout_width="115dp"
+                        android:layout_width="153dp"
                         android:textAlignment="textEnd"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:singleLine="true"/>
 
                     <Spinner
                         android:id="@+id/lidSpinner"
@@ -210,15 +212,15 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
                     android:text="Add"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="10dp"/>
 
                 <Button
                     android:id="@+id/cancelButton"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:background="#FF5151"
+                    android:background="@color/cancel_button"
                     android:textColor="@android:color/white"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="10dp"
                     android:text="Cancel" />
             </LinearLayout>
 

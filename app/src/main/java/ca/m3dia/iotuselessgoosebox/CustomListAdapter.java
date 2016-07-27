@@ -81,7 +81,9 @@ public class CustomListAdapter extends RecyclerView.Adapter {
             if (v == customDelete) {
                 delete(getLayoutPosition());
 
-                Toast.makeText(mContext, "Custom item " + (getLayoutPosition() + 1) +  " has been deleted.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Custom item " + (CustomFragment.name.get(getLayoutPosition())) +  " has been deleted.", Toast.LENGTH_SHORT).show();
+
+                notifyDataSetChanged();
             } else {
                 final String sequence = CustomFragment.letters.get(getLayoutPosition());
                 Toast.makeText(mContext, sequence + " triggered.", Toast.LENGTH_SHORT).show();

@@ -111,5 +111,8 @@ public class PresetFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         //attach layout manager to recyclerView
         recyclerView.setLayoutManager(layoutManager);
+
+        //divider lines
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
     }
 }

@@ -129,6 +129,9 @@ public class CustomFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         //attach layout manager to recyclerView
         recyclerView.setLayoutManager(layoutManager);
+
+        //divider lines
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
     }
 
     private void bindViews(final View view) {
@@ -166,19 +169,19 @@ public class CustomFragment extends Fragment {
         redLedSpinner = (Spinner) view.findViewById(R.id.redLedSpinner);
         ArrayAdapter<CharSequence> redLedAdapter = new ArrayAdapter<CharSequence>(getContext(),
                 R.layout.spinner_textview_align, getResources().getStringArray(R.array.red_led_spinner));
-        lidLedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        redLedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         redLedSpinner.setAdapter(redLedAdapter);
 
         armSpinner = (Spinner) view.findViewById(R.id.armSpinner);
         ArrayAdapter<CharSequence> armAdapter = new ArrayAdapter<CharSequence>(getContext(),
                 R.layout.spinner_textview_align, getResources().getStringArray(R.array.arm_spinner));
-        lidLedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        armAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         armSpinner.setAdapter(armAdapter);
 
         soundSpinner = (Spinner) view.findViewById(R.id.soundSpinner);
         ArrayAdapter<CharSequence> soundAdapter = new ArrayAdapter<CharSequence>(getContext(),
                 R.layout.spinner_textview_align, getResources().getStringArray(R.array.sound_spinner));
-        lidLedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        soundAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         soundSpinner.setAdapter(soundAdapter);
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -406,12 +409,18 @@ public class CustomFragment extends Fragment {
 
 
     public void onFabPressed(View view) {
+        if (info.size() >= 5) {
+            Toast.makeText(getActivity(), "Delete actions before adding new ones.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         mFab.setImageDrawable(null);
         final float startX = mFab.getX();
 
         AnimatorPath path = new AnimatorPath();
         path.moveTo(0, 0);
-        path.curveTo(-200, 200, -400, 100, -600, 50);
+        //path.curveTo(-200, 200, -400, 100, -600, 50);
+        path.curveTo(-300, 150, -800, 80, -800, 300);
 
         final ObjectAnimator anim = ObjectAnimator.ofObject(this, "fabLoc",
                 new PathEvaluator(), path.getPoints().toArray());
