@@ -2,35 +2,23 @@ package ca.m3dia.iotuselessgoosebox;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.AutoTransition;
-import android.transition.ChangeBounds;
-import android.transition.ChangeClipBounds;
+import android.text.Html;
 import android.transition.ChangeImageTransform;
-import android.transition.ChangeTransform;
-import android.transition.Explode;
 import android.transition.Scene;
-import android.transition.Slide;
 import android.transition.TransitionManager;
-import android.transition.TransitionSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,9 +37,7 @@ import ca.m3dia.iotuselessgoosebox.lib.AnimatorPath;
 import ca.m3dia.iotuselessgoosebox.lib.PathEvaluator;
 import ca.m3dia.iotuselessgoosebox.lib.PathPoint;
 import io.particle.android.sdk.cloud.ParticleCloudException;
-import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.cloud.ParticleDevice;
-import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
 
 /**
  * Created by Umar Bhutta.
@@ -90,8 +76,6 @@ public class CustomFragment extends Fragment {
         mFabSize = getResources().getDimensionPixelSize(R.dimen.fab_size);
         bindViews(view);
         setupList(view);
-
-        ParticleDeviceSetupLibrary.init(getContext().getApplicationContext(), MainActivity.class);
 
         return view;
     }
@@ -184,6 +168,8 @@ public class CustomFragment extends Fragment {
                 onCancelButtonPressed(view);
             }
         });
+
+        toggleCustomTextView.setText(Html.fromHtml("Define up to 5 actions. <u>Tap here</u> to update the action list and randomly execute the actions via a switch toggle. <br /><br />Alternatively, you can tap a custom action manually to execute it immediately."));
 
         toggleCustomTextView.setOnClickListener(new View.OnClickListener() {
             @Override

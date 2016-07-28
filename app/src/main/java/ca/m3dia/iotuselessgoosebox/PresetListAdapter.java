@@ -8,17 +8,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
 import io.particle.android.sdk.cloud.ParticleCloudException;
-import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.cloud.ParticleDevice;
 
 /**
- * Created by Datatellit1 on 7/21/2016.
+ * Created by Umar Bhutta.
  */
 public class PresetListAdapter extends RecyclerView.Adapter {
     private Context mContext;

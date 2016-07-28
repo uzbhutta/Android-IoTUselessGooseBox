@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * Created by umarb_000 on 2016-07-20.
+ * Created by Umar Bhutta.
  */
 public class ViewPagerFragment extends Fragment {
     @Nullable

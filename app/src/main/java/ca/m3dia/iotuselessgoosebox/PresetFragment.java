@@ -5,24 +5,21 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
 import io.particle.android.sdk.cloud.ParticleCloudException;
-import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.cloud.ParticleDevice;
 
 /**
- * Created by umarb_000 on 2016-07-20.
+ * Created by Umar Bhutta.
  */
 public class PresetFragment extends Fragment {
     private TextView togglePresetTextView;
@@ -35,6 +32,9 @@ public class PresetFragment extends Fragment {
         setupList(view);
 
         togglePresetTextView = (TextView) view.findViewById(R.id.togglePresetTextView);
+
+        togglePresetTextView.setText(Html.fromHtml("<u>Tap here</u> to set the box to Preset Mode. Toggling the switch will then randomly execute one of the preset actions. <br /><br />Alternatively, you can tap a preset action manually to execute it immediately."));
+
         togglePresetTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +65,7 @@ public class PresetFragment extends Fragment {
                             Common.currDevice.callFunction("jsonParser", jsonList);
 
                             //capture resultCode from particle function to toast to user
-                            if (resultCode == 1) {
+                            if (resultCode == 0) {
                                 getActivity().runOnUiThread(new Runnable() {
                                     public void run() {
                                         Toast.makeText(getActivity(), "Preset Mode now enabled.", Toast.LENGTH_SHORT).show();

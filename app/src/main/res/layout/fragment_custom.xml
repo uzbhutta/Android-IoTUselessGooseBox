@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/relativeLayout">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/instructionsLinearLayout"
@@ -10,18 +10,17 @@
         android:layout_height="120dp"
         android:background="@color/brand_primary"
         android:elevation="3dp"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/toggleCustomTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/toggleCustomTextView"
+            android:maxLines="10"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:paddingTop="15dp"
-            android:maxLines="10"
-            android:text="Define up to 5 actions. Tap here to update the action list and randomly execute the actions via a switch toggle. \n\nAlternatively, you can tap a custom action manually to execute it immediately."
-            />
+            android:text="" />
 
     </LinearLayout>
 
@@ -64,7 +63,7 @@
             android:layout_height="match_parent"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="12dp"/>
+            android:paddingTop="12dp" />
 
     </LinearLayout>
 
@@ -78,153 +77,160 @@
         android:clipChildren="false"
         android:elevation="5dp">
 
-        <LinearLayout
-            android:id="@+id/add_custom_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingTop="-40dp"
-            android:clipChildren="false"
-            android:orientation="vertical">
+        <ScrollView android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:fillViewport="false">
 
             <LinearLayout
-                android:id="@+id/add_custom__items"
+                android:id="@+id/add_custom_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:scaleX="0"
-                android:scaleY="0"
-                android:paddingBottom="20dp"
                 android:clipChildren="false"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:paddingTop="-40dp">
 
                 <LinearLayout
-                    android:id="@+id/add_custom_titles"
+                    android:id="@+id/add_custom__items"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingRight="20dp"
-                    android:orientation="vertical">
+                    android:layout_gravity="center"
+                    android:clipChildren="false"
+                    android:orientation="horizontal"
+                    android:paddingBottom="20dp"
+                    android:scaleX="0"
+                    android:scaleY="0">
 
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/add_custom_titles"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingRight="20dp">
 
-                        android:text="Name" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="18dp"
+                            android:text="Lid Movement" />
 
-                    <TextView
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="18dp"
+                            android:text="Lid Light" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="18dp"
+                            android:text="Goose Light" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="18dp"
+                            android:text="Arm Movement" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="18dp"
+                            android:text="Goose Sound" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="18dp"
+
+                            android:text="Name" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/add_custom_fields"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
-                        android:text="Lid Movement" />
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingLeft="20dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
-                        android:text="Lid Light" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
-                        android:text="Goose Light" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
-                        android:text="Arm Movement" />
+                        <Spinner
+                            android:id="@+id/lidSpinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
-                        android:text="Goose Sound" />
+                        <Spinner
+                            android:id="@+id/lidLedSpinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp" />
+
+                        <Spinner
+                            android:id="@+id/redLedSpinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp" />
+
+                        <Spinner
+                            android:id="@+id/armSpinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp" />
+
+                        <Spinner
+                            android:id="@+id/soundSpinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp" />
+
+                        <EditText
+                            android:id="@+id/nameEditText"
+                            android:layout_width="153dp"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text=""
+                            android:textAlignment="textEnd" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/add_custom_fields"
+                    android:id="@+id/buttons_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingLeft="20dp"
-                    android:orientation="vertical">
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:scaleX="0"
+                    android:scaleY="0">
 
-                    <EditText
-                        android:id="@+id/nameEditText"
-                        android:text=""
-                        android:layout_width="153dp"
-                        android:textAlignment="textEnd"
+                    <Button
+                        android:id="@+id/addButton"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"/>
+                        android:layout_marginRight="10dp"
+                        android:background="@android:color/white"
+                        android:text="Add" />
 
-                    <Spinner
-                        android:id="@+id/lidSpinner"
-                        android:layout_width="wrap_content"
+                    <Button
+                        android:id="@+id/cancelButton"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp" />
-
-                    <Spinner
-                        android:id="@+id/lidLedSpinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp" />
-
-                    <Spinner
-                        android:id="@+id/redLedSpinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp" />
-
-                    <Spinner
-                        android:id="@+id/armSpinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp" />
-
-                    <Spinner
-                        android:id="@+id/soundSpinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp" />
-
+                        android:layout_marginLeft="10dp"
+                        android:background="@color/cancel_button"
+                        android:text="Cancel"
+                        android:textColor="@android:color/white" />
                 </LinearLayout>
 
+
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/buttons_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:scaleX="0"
-                android:scaleY="0"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/addButton"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/white"
-                    android:text="Add"
-                    android:layout_marginRight="10dp"/>
-
-                <Button
-                    android:id="@+id/cancelButton"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/cancel_button"
-                    android:textColor="@android:color/white"
-                    android:layout_marginLeft="10dp"
-                    android:text="Cancel" />
-            </LinearLayout>
-
-
-        </LinearLayout>
+        </ScrollView>
 
         <ImageButton
             android:id="@+id/fab"
@@ -235,7 +241,7 @@
             android:background="@drawable/ripple"
             android:elevation="10dp"
             android:onClick="onFabPressed"
-            android:transitionName="button_fab"
-            android:src="@drawable/ic_add_black_24dp"/>
+            android:src="@drawable/ic_add_black_24dp"
+            android:transitionName="button_fab" />
     </FrameLayout>
 </RelativeLayout>
